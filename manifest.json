@@ -1,0 +1,15 @@
+{
+  "manifest_version": 2,
+
+  "name": "CPNextTrain",
+  "description": "Para ver a que horas vai sair o próximo comboio da CP",
+  "version": "0.0.1",
+
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "http://www.cp.pt/"
+  ]
+}
