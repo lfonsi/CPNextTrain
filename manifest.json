@@ -1,15 +1,24 @@
 {
-  "manifest_version": 2,
+    "manifest_version": 2,
 
-  "name": "CPNextTrain",
-  "description": "Para ver a que horas vai sair o próximo comboio da CP",
-  "version": "0.0.1",
+    "name": "CPNextTrain",
+    "description": "Para ver a que horas vai sair o próximo comboio da CP",
+    "version": "0.0.1",
 
-  "browser_action": {
-    "default_icon": "icon.png",
-    "default_popup": "popup.html"
-  },
-  "permissions": [
-    "http://www.cp.pt/"
-  ]
+    "browser_action": {
+        "default_icon": "icon.png",
+        "default_popup": "popup.html"
+    },
+
+    "options_page": "options.html",
+
+    "background": {
+        "scripts": ["scripts/background.js", "scripts/jquery-2.1.3.min.js"],
+        "persistent": false
+    },
+
+    "permissions": [
+        "storage",
+        "http://www.cp.pt/"
+    ]
 }
