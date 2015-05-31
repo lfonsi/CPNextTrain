@@ -55,22 +55,25 @@ function findNextTrain(trains) {
     $.each(trains, function(index, train) {
         if (train.departureTime.isAfter(currentTime)) {
             handleNextTrain(train);
+            found = true;
             return false;
         }
     });
 
     if (!found && trains.length > 0) {
-        handleNextTrain(trains[0]);
+        handleNextTrain(trains[0], true);
     }
 }
 
-function handleNextTrain(train) {
+function handleNextTrain(train, nextDay) {
+    nextDay ? train.departureTime.add(1, 'd') : '';
+
     var currentTime = moment(),
         arrivalTime = train.arrivalTime.format('HH:mm'),
         departureTime = train.departureTime.format('HH:mm'),
         minutesToTrain = train.departureTime.diff(currentTime, 'minutes');
 
-    renderStatus('O próximo comboio parte de ' + origin + ' às ' + departureTime + ' e chega a ' + destination + ' às ' +
+    renderStatus('O próximo comboio parte de <b>' + origin + '</b> às ' + departureTime + ' e chega a <b>' + destination + '</b> às ' +
         arrivalTime + '. Corre! Tens ' + minutesToTrain + ' minutos para apanhar o comboio!');
 }
 

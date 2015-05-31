@@ -13,14 +13,8 @@ body {
     width: 275px;
 }
 
-#container img {
+#status {
     width: 100%;
-    opacity: 0.3;
-    z-index: -1;
-}
-
-#status{
-    top:0;
 }
 
 .absolute {
@@ -38,11 +32,19 @@ body {
     margin-bottom: 5px;
 }
 
-#save{
-    right:0;
+#save {
+    right: 0;
 }
 
 #option-container {
     display: inline-block;
     position: relative;
+}
+
+#img-background {
+    width: 100%;
+    background-image: url('../img/logo.jpg');
+    background-size: 100% 100%;
+    height: auto;
+    /*opacity:0.3;*/
 }
