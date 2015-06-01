@@ -10,11 +10,15 @@ body {
 }
 
 #container {
-    width: 275px;
+    width: auto;
 }
 
 #status {
-    width: 100%;
+    font-size: 14px;
+    width: 300px;
+    margin:0 auto;
+    margin-bottom: 5px;
+    text-align: center;
 }
 
 .absolute {
@@ -47,4 +51,29 @@ body {
     background-size: 100% 100%;
     height: auto;
     /*opacity:0.3;*/
+}
+
+.hide {
+    display: none;
+}
+
+#option-status{
+    margin: 5px;
+}
+
+table{
+    border-collapse: collapse;
+    margin: 0 auto;
+}
+
+table, th, td {
+    border: 2px solid black;
+    font-size: 10px;
+}
+
+th,td{
+    padding: 5px;
+}
+td{
+    text-align: center;
 }

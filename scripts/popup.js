@@ -9,6 +9,8 @@ function getTrain() {
             origin = items.origin;
             destination = items.destination;
 
+            renderStatus('A pesquisar partidas de <b>' + origin + '</b> para <b>' + destination + '</b>');
+
             chrome.runtime.sendMessage({
                 type: 'callService',
                 origin: origin,
@@ -19,7 +21,7 @@ function getTrain() {
                 if (response.success) {
                     renderStatus(response.msg);
                     var trains = parseData(response.data);
-                    findNextTrain(trains);
+                    showTrains(trains);
                 } else {
                     renderStatus(response.msg);
                 }
@@ -48,33 +50,61 @@ function parseData(data) {
     return trains;
 }
 
-function findNextTrain(trains) {
+function showTrains(trains) {
     var currentTime = moment(),
         found = false;
 
-    $.each(trains, function(index, train) {
-        if (train.departureTime.isAfter(currentTime)) {
-            handleNextTrain(train);
-            found = true;
-            return false;
-        }
-    });
+    chrome.storage.sync.get({
+        nrOccurrences: '1'
+    }, function(item) {
+        var occurrences = parseInt(item.nrOccurrences);
+        var trainsToShow = [];
 
-    if (!found && trains.length > 0) {
-        handleNextTrain(trains[0], true);
-    }
+        $.each(trains, function(index, train) {
+            if (train.departureTime.isAfter(currentTime)) {
+                trainsToShow.push(train);
+                if (trainsToShow.length === occurrences) {
+                    found = true;
+                    return false;
+                }
+            }
+        });
+
+        if (!found && trains.length > 0) {
+
+            $.each(trains, function(index, train) {
+
+                if (trainsToShow.length < occurrences) {
+
+                    train.departureTime.add(1, 'd');
+                    trainsToShow.push(train);
+
+                } else {
+                    found = true;
+                    return false;
+                }
+
+            });
+        }
+
+        displayTrains(trainsToShow);
+    });
 }
 
-function handleNextTrain(train, nextDay) {
-    nextDay ? train.departureTime.add(1, 'd') : '';
+function displayTrains(trains) {
+    var currentTime = moment();
+    $.each(trains, function(index, train) {
+        var row = $('<tr>');
+        var departureTd = $('<td>').append(train.departureTime.format('HH:mm'));
+        var arrivalTd = $('<td>').append(train.arrivalTime.format('HH:mm'));
+        var timeToDepartTd = $('<td>').append(train.departureTime.diff(currentTime, 'minutes') + 'min.');
+        row.append(departureTd).append(arrivalTd).append(timeToDepartTd);
+        $('#train-table table').append(row);
+    });
 
-    var currentTime = moment(),
-        arrivalTime = train.arrivalTime.format('HH:mm'),
-        departureTime = train.departureTime.format('HH:mm'),
-        minutesToTrain = train.departureTime.diff(currentTime, 'minutes');
+    renderStatus('<b>' + origin + '</b> -> <b>' + destination + '</b>');
+    $('#train-table').removeClass('hide');
 
-    renderStatus('O próximo comboio parte de <b>' + origin + '</b> às ' + departureTime + ' e chega a <b>' + destination + '</b> às ' +
-        arrivalTime + '. Corre! Tens ' + minutesToTrain + ' minutos para apanhar o comboio!');
 }
 
 function renderStatus(statusText) {
@@ -82,6 +112,5 @@ function renderStatus(statusText) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    renderStatus('A pesquisar próxima partida...');
     getTrain();
 });
