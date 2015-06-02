@@ -4,7 +4,10 @@ function save_options() {
     var origin = $('#origin').val();
     var destination = $('#destination').val();
     var nrOccurrences = $('#nrOccurrences').val();
-    if (isNaN(parseInt(nrOccurrences)) || nrOccurrences === '') {
+    var minimumTime = $('#minTime').val();
+
+    if (isNaN(parseInt(nrOccurrences)) || nrOccurrences === '' || isNaN(parseInt(minimumTime)) || minimumTime === '') {
+
         $('#option-status').css('color','#FF0000');
         $('#option-status').text('Por favor insira um número válido!');
         
@@ -19,7 +22,8 @@ function save_options() {
     chrome.storage.sync.set({
         origin: origin,
         destination: destination,
-        nrOccurrences: nrOccurrences
+        nrOccurrences: nrOccurrences,
+        minimumTime: minimumTime
     }, function() {
 
         // Update status to let user know options were saved.
@@ -38,12 +42,14 @@ function restore_options() {
     chrome.storage.sync.get({
             origin: 'Entrecampos',
             destination: 'Benfica',
-            nrOccurrences: '1'
+            nrOccurrences: '1',
+            minimumTime: '0'
         },
         function(items) {
             $('#origin').val(items.origin);
             $('#destination').val(items.destination);
             $('#nrOccurrences').val(items.nrOccurrences);
+            $('#minTime').val(items.minimumTime);
             $('#save').removeAttr('disabled');
         });
 }

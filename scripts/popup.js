@@ -3,11 +3,13 @@ var origin, destination;
 function getTrain() {
     chrome.storage.sync.get({
             origin: 'Entrecampos',
-            destination: 'Benfica'
+            destination: 'Benfica',
+            minimumTime: '0'
         },
         function(items) {
             origin = items.origin;
             destination = items.destination;
+            minimumTime = parseInt(items.minimumTime);
 
             renderStatus('A pesquisar partidas de <b>' + origin + '</b> para <b>' + destination + '</b>');
 
@@ -51,13 +53,13 @@ function parseData(data) {
 }
 
 function showTrains(trains) {
-    var currentTime = moment(),
+    var currentTime = moment().add(minimumTime,'m'),
         found = false;
 
     chrome.storage.sync.get({
-        nrOccurrences: '1'
+        nrOccurrences: '1',
     }, function(item) {
-        var occurrences = parseInt(item.nrOccurrences);
+        var occurrences = parseInt(item.nrOccurrences); 
         var trainsToShow = [];
 
         $.each(trains, function(index, train) {

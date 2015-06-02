@@ -10,7 +10,6 @@
 <link rel="stylesheet" type="text/css" href="styles/styles.css">
 
 <body>
-    
     <div id="option-container">
         <div class="option">
             <span class="label">Estação de origem</span>
@@ -21,7 +20,6 @@
                 <option value="Lisboa - Oriente">Oriente</option>
             </select>
         </div>
-
         <div class="option">
             <span class="label">Estação de destino</span>
             <select id="destination">
@@ -32,8 +30,14 @@
             </select>
         </div>
         <div>
-            <span class="label">Nº de partidas a mostrar</span>
-                <input type="text" maxlength="2" id="nrOccurrences">
+            <span class="label-occurrences">Mostrar próximos</span>
+            <input type="text" size="2" maxlength="2" id="nrOccurrences" class="center">
+            <span class="label-occurrences">comboios</span>
+        </div>
+        <div>
+            <span class="label-occurrences">Tempo mínimo para chegar à estação</span>
+            <input type="text" size="2" maxlength="2" id="minTime" class="center">
+            <span class="label-occurrences">minutos</span>
         </div>
         <div id="option-status" style="color:#00FF00"></div>
         <button id="save" class="absolute" disabled="disabled">Gravar</button>
