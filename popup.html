@@ -13,7 +13,26 @@
 <body>
     <div id="container">
         <div id="status"></div>
-
+        <div id="error"></div>
+        <div id="initial-content">
+            <div class="option-container">
+                <span class="label">Por favor indique as estações de origem e destino</span>
+                <div class="option">
+                    <span class="label">Estação de origem</span>
+                    <select id="origin">
+                    </select>
+                </div>
+                <div class="option">
+                    <span class="label">Estação de destino</span>
+                    <select id="destination">
+                    </select>
+                </div>
+                <div class="option">
+                    <input type="button" id="save" class="" value="Gravar">
+                </div>
+            </div>
+            <span class="label">Abra as <a href="options.html" target="_blank">opções</a> para mais preferências</span>
+        </div>
         <div id="train-table" class="hide">
             <table>
                 <tr>
@@ -22,6 +41,9 @@
                     <th>Partida em...</th>
                 </tr>
             </table>
+        </div>
+        <div class="link hide">
+            <a href="options.html" target="_blank">Opções</a>
         </div>
         <div id="img-background">
         </div>

@@ -1,5 +1,18 @@
 var origin, destination;
 
+function init() {
+    chrome.storage.sync.get('started', function(item) {
+        if (item.started) {
+            $('#initial-content').remove();
+            $('.link').removeClass('hide');
+            getTrain();
+        } else {
+            buildSelects();
+            $('#save').click(clickHandler);
+        }
+    })
+}
+
 function getTrain() {
     chrome.storage.sync.get({
             origin: 'Entrecampos',
@@ -23,7 +36,7 @@ function getTrain() {
                 if (response.success) {
                     renderStatus(response.msg);
                     var trains = parseData(response.data);
-                    showTrains(trains);
+                    selectTrains(trains, displayTrains);
                 } else {
                     renderStatus(response.msg);
                 }
@@ -52,15 +65,16 @@ function parseData(data) {
     return trains;
 }
 
-function showTrains(trains) {
-    var currentTime = moment().add(minimumTime,'m'),
+function selectTrains(trains, callback) {
+    var currentTime = moment().add(minimumTime, 'm'),
+        trainsToShow = [],
         found = false;
 
     chrome.storage.sync.get({
         nrOccurrences: '1',
     }, function(item) {
-        var occurrences = parseInt(item.nrOccurrences); 
-        var trainsToShow = [];
+        var occurrences = parseInt(item.nrOccurrences);
+
 
         $.each(trains, function(index, train) {
             if (train.departureTime.isAfter(currentTime)) {
@@ -88,13 +102,13 @@ function showTrains(trains) {
 
             });
         }
-
-        displayTrains(trainsToShow);
+        callback(trainsToShow);
     });
 }
 
 function displayTrains(trains) {
     var currentTime = moment();
+
     $.each(trains, function(index, train) {
         var row = $('<tr>');
         var departureTd = $('<td>').append(train.departureTime.format('HH:mm'));
@@ -105,14 +119,66 @@ function displayTrains(trains) {
     });
 
     renderStatus('<b>' + origin + '</b> -> <b>' + destination + '</b>');
-    $('#train-table').removeClass('hide');
 
+    if (trains.length === 0) {
+        renderError('Não existem comboios para este percurso!');
+        return;
+    }
+
+    $('#train-table').removeClass('hide');
 }
 
 function renderStatus(statusText) {
     $('#status').html(statusText);
 }
 
+function renderError(errorText) {
+    $('#error').html(errorText);
+}
+
+function clickHandler() {
+    origin = $('#origin').val();
+    destination = $('#destination').val();
+
+    if (origin !== '' && destination !== '') {
+        chrome.storage.sync.set({
+            origin: origin,
+            destination: destination,
+            started: "true"
+        }, function() {
+            $('#initial-content').remove();
+            $('.link').removeClass('hide');
+            getTrain();
+        });
+    }
+}
+
+/////////////////////////// TO BE REMOVED ///////////////////////////
+
+function buildSelects() {
+    var stations = $.getJSON('../stations.json', function(data) {
+        $.each(data.stations, function(key, value) {
+            var upperCased = value.replace(/\b\w/g, capitalize);
+            $('#origin').append($('<option>', {
+                    value: upperCased
+                })
+                .text(upperCased));
+
+            $('#destination').append($('<option>', {
+                    value: upperCased
+                })
+                .text(upperCased));
+        });
+
+    });
+}
+
+function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+/////////////////////////// TO BE REMOVED ///////////////////////////
+
 document.addEventListener('DOMContentLoaded', function() {
-    getTrain();
+    init();
 });

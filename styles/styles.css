@@ -13,12 +13,20 @@ body {
     width: auto;
 }
 
-#status {
-    font-size: 14px;
+#status,
+#error {
     width: 300px;
-    margin:0 auto;
+    margin: 0 auto;
     margin-bottom: 5px;
     text-align: center;
+}
+
+#status {
+    font-size: 14px;
+}
+
+#error {
+    font-size: 12px;
 }
 
 .absolute {
@@ -32,16 +40,28 @@ body {
 
 .label {
     display: block;
-    
 }
 
-.label, .label-occurrences{
-font-size: 12px;
+.label,
+.label-occurrences {
+    font-size: 12px;
     margin-bottom: 5px;
 }
 
 #save {
     right: 0;
+}
+
+.options #save {
+    position: absolute;
+}
+
+#initial-content #save {
+    display: block;
+}
+
+#initial-content {
+    position: relative;
 }
 
 #option-container {
@@ -61,27 +81,36 @@ font-size: 12px;
     display: none;
 }
 
-#option-status{
+.link{
+    font-size: 8px;
+    text-align: right;
+}
+
+#option-status {
     margin: 5px;
 }
 
-input.center{
+input.center {
     text-align: center;
 }
 
-table{
+table {
     border-collapse: collapse;
     margin: 0 auto;
 }
 
-table, th, td {
+table,
+th,
+td {
     border: 2px solid black;
     font-size: 10px;
 }
 
-th,td{
+th,
+td {
     padding: 5px;
 }
-td{
+
+td {
     text-align: center;
 }

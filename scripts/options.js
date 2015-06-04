@@ -23,7 +23,8 @@ function saveOptions() {
         origin: origin,
         destination: destination,
         nrOccurrences: nrOccurrences,
-        minimumTime: minimumTime
+        minimumTime: minimumTime,
+        started : "true"
     }, function() {
 
         // Update status to let user know options were saved.
@@ -41,8 +42,8 @@ function restoreOptions() {
     buildSelects();
 
     chrome.storage.sync.get({
-            origin: 'Entrecampos',
-            destination: 'Benfica',
+            origin: '',
+            destination: '',
             nrOccurrences: '1',
             minimumTime: '0'
         },
