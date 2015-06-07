@@ -7,6 +7,7 @@ function init() {
             $('.link').removeClass('hide');
             getTrain();
         } else {
+            $('#initial-content').removeClass('hide');
             buildSelects();
             $('#save').click(clickHandler);
         }

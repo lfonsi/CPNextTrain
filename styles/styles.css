@@ -11,6 +11,7 @@ body {
 
 #container {
     width: auto;
+    position: relative;
 }
 
 #status,
@@ -29,6 +30,36 @@ body {
     font-size: 12px;
 }
 
+#save {
+    right: 0;
+}
+
+#initial-content {
+    position: relative;
+}
+
+#initial-content #save {
+    display: block;
+}
+
+#option-container {
+    position: relative;
+    margin: 0 auto;
+    width:500px;
+}
+
+#img-background {
+    width: 100%;
+    background-image: url('../img/logo.jpg');
+    background-size: 100% 100%;
+    height: auto;
+    /*opacity:0.3;*/
+}
+
+#option-status {
+    margin: 5px;
+}
+
 .absolute {
     position: absolute;
 }
@@ -36,6 +67,10 @@ body {
 .option {
     margin: 10px;
     display: inline-block;
+}
+
+.option.input{
+    margin:5px;
 }
 
 .label {
@@ -48,33 +83,8 @@ body {
     margin-bottom: 5px;
 }
 
-#save {
-    right: 0;
-}
-
 .options #save {
     position: absolute;
-}
-
-#initial-content #save {
-    display: block;
-}
-
-#initial-content {
-    position: relative;
-}
-
-#option-container {
-    display: inline-block;
-    position: relative;
-}
-
-#img-background {
-    width: 100%;
-    background-image: url('../img/logo.jpg');
-    background-size: 100% 100%;
-    height: auto;
-    /*opacity:0.3;*/
 }
 
 .hide {
@@ -83,12 +93,9 @@ body {
 
 .link{
     margin:5px;
-    font-size: 8px;
-    text-align: right;
-}
-
-#option-status {
-    margin: 5px;
+    font-size: 9px;
+    position: absolute;
+    right: 0;
 }
 
 input.center {
