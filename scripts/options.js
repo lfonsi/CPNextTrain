@@ -52,7 +52,6 @@ function checkNumbers(nrOccurrences, minimumTime) {
 
     if (nrOccurrences > 10) {
         renderError('Por favor escolha um número entre 0 e 10!', true);
-        $('input#nrOccurrences').css('border-color', '#b03535');
         return false;
     }
 
