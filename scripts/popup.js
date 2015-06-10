@@ -4,7 +4,6 @@ function init() {
     chrome.storage.sync.get('started', function(item) {
         if (item.started) {
             $('#initial-content').remove();
-            $('.link').removeClass('hide');
             getTrain();
         } else {
             $('#initial-content').removeClass('hide');
@@ -26,6 +25,7 @@ function getTrain() {
             minimumTime = parseInt(items.minimumTime);
 
             renderStatus('A pesquisar partidas de <b>' + origin + '</b> para <b>' + destination + '</b>');
+            $('.link').removeClass('hide');
 
             chrome.runtime.sendMessage({
                 type: 'callService',
@@ -39,7 +39,7 @@ function getTrain() {
                     var trains = parseData(response.data);
                     selectTrains(trains, displayTrains);
                 } else {
-                    renderStatus(response.msg);
+                    renderError(response.msg, false);
                 }
             });
         });
@@ -66,7 +66,7 @@ function parseData(data) {
     return trains;
 }
 
-function selectTrains(trains, callback) {
+function selectTrains(trains, callback, trainsToShow) {
     var currentTime = moment().add(minimumTime, 'm'),
         trainsToShow = [],
         found = false;
@@ -75,7 +75,6 @@ function selectTrains(trains, callback) {
         nrOccurrences: '1',
     }, function(item) {
         var occurrences = parseInt(item.nrOccurrences);
-
 
         $.each(trains, function(index, train) {
             if (train.departureTime.isAfter(currentTime)) {
@@ -88,19 +87,14 @@ function selectTrains(trains, callback) {
         });
 
         if (!found && trains.length > 0) {
+            var nrTrainsToAdd = (occurrences - trainsToShow.length);
 
-            $.each(trains, function(index, train) {
+            //builds an array with the missing trains to be processed
+            var toAdd = trains.slice(0, nrTrainsToAdd);
 
-                if (trainsToShow.length < occurrences) {
-
-                    train.departureTime.add(1, 'd');
-                    trainsToShow.push(train);
-
-                } else {
-                    found = true;
-                    return false;
-                }
-
+            $.each(toAdd, function(index, train) {
+                train.departureTime.add(1, 'd');
+                trainsToShow.push(train);
             });
         }
         callback(trainsToShow);
@@ -118,23 +112,15 @@ function displayTrains(trains) {
         row.append(departureTd).append(arrivalTd).append(timeToDepartTd);
         $('#train-table table').append(row);
     });
-
-    renderStatus('<b>' + origin + '</b> -> <b>' + destination + '</b>');
+    var img = $('<img>').attr('src', '../img/train.png').addClass('train');
+    renderStatus('<b>' + origin + '</b> ' + img[0].outerHTML + ' <b>' + destination + '</b>');
 
     if (trains.length === 0) {
-        renderError('Não existem comboios para este percurso!');
+        renderError('Não existem comboios para este percurso!', false);
         return;
     }
 
     $('#train-table').removeClass('hide');
-}
-
-function renderStatus(statusText) {
-    $('#status').html(statusText);
-}
-
-function renderError(errorText) {
-    $('#error').html(errorText);
 }
 
 function clickHandler() {
@@ -145,7 +131,7 @@ function clickHandler() {
         chrome.storage.sync.set({
             origin: origin,
             destination: destination,
-            started: "true"
+            started: "true",
         }, function() {
             $('#initial-content').remove();
             $('.link').removeClass('hide');
@@ -153,32 +139,6 @@ function clickHandler() {
         });
     }
 }
-
-/////////////////////////// TO BE REMOVED ///////////////////////////
-
-function buildSelects() {
-    var stations = $.getJSON('../stations.json', function(data) {
-        $.each(data.stations, function(key, value) {
-            var upperCased = value.replace(/\b\w/g, capitalize);
-            $('#origin').append($('<option>', {
-                    value: upperCased
-                })
-                .text(upperCased));
-
-            $('#destination').append($('<option>', {
-                    value: upperCased
-                })
-                .text(upperCased));
-        });
-
-    });
-}
-
-function capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-/////////////////////////// TO BE REMOVED ///////////////////////////
 
 document.addEventListener('DOMContentLoaded', function() {
     init();

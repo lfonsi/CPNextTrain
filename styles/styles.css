@@ -14,20 +14,33 @@ body {
     position: relative;
 }
 
-#status,
-#error {
+#success-container,
+#error-container,
+#status-container {
     width: 300px;
     margin: 0 auto;
     margin-bottom: 5px;
     text-align: center;
 }
 
-#status {
+#status-container {
+    position: relative;
     font-size: 14px;
+    top: -5px;
 }
 
-#error {
-    font-size: 12px;
+#success-container,
+#error-container {
+    font-size: 16px;
+    margin: 5px;
+}
+
+#success-container {
+    color: #00FF00;
+}
+
+#error-container {
+    color: #FF0000;
 }
 
 #save {
@@ -45,7 +58,7 @@ body {
 #option-container {
     position: relative;
     margin: 0 auto;
-    width:500px;
+    width: 500px;
 }
 
 #img-background {
@@ -54,10 +67,6 @@ body {
     background-size: 100% 100%;
     height: auto;
     /*opacity:0.3;*/
-}
-
-#option-status {
-    margin: 5px;
 }
 
 .absolute {
@@ -69,8 +78,8 @@ body {
     display: inline-block;
 }
 
-.option.input{
-    margin:5px;
+.option.input {
+    margin: 5px;
 }
 
 .label {
@@ -91,11 +100,21 @@ body {
     display: none;
 }
 
-.link{
-    margin:5px;
+.link {
+    margin: 5px;
     font-size: 9px;
     position: absolute;
     right: 0;
+}
+
+.train {
+    width: 25px;
+    position: relative;
+    top: 5px;
+}
+
+*:focus {
+    outline: none;
 }
 
 input.center {

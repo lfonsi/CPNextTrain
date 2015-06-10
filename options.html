@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>CPNextTrain - Opções</title>
     <script src="scripts/jquery-2.1.3.min.js"></script>
+    <script src="scripts/common.js"></script>
     <script src="scripts/options.js"></script>
 </head>
 <link rel="stylesheet" type="text/css" href="styles/styles.css">
@@ -30,7 +31,8 @@
             <input type="text" size="2" maxlength="2" id="minTime" class="center">
             <span class="label-occurrences">minutos a chegar à estação</span>
         </div>
-        <div id="option-status" style="color:#00FF00"></div>
+        <div id="success-container"></div>
+        <div id="error-container"></div>
         <button id="save" class="absolute" disabled="disabled">Gravar</button>
     </div>
 </body>
