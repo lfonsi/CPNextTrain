@@ -23,7 +23,6 @@ function saveOptions() {
 // Restores select box and checkbox state using the preferences
 // stored in chrome.storage.
 function restoreOptions() {
-    buildSelects();
 
     chrome.storage.sync.get({
             origin: '',
@@ -33,6 +32,7 @@ function restoreOptions() {
             appVersion: '0'
         },
         function(items) {
+            buildSelects();
             $('#origin').val(items.origin);
             $('#destination').val(items.destination);
             $('#nrOccurrences').val(items.nrOccurrences);

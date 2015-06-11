@@ -1,6 +1,5 @@
 function buildSelects() {
-    var stations = $.getJSON('../stations.json', function(data) {
-        $.each(data.stations, function(key, value) {
+        $.each(stations.cp, function(key, value) {
             var upperCased = value.replace(/\b\w/g, capitalize);
             $('#origin').append($('<option>', {
                     value: upperCased
@@ -12,7 +11,6 @@ function buildSelects() {
                 })
                 .text(upperCased));
         });
-    });
 }
 
 function renderError(msg, hasTimeout) {
