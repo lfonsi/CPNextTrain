@@ -15,10 +15,11 @@ function buildSelects() {
 
 function renderError(msg, hasTimeout) {
     $('#error-container').html(msg);
+    $('#error-container').removeClass('hide');
 
     if (hasTimeout) {
         setTimeout(function() {
-            $('#error-container').empty();
+            $('#error-container').addClass('hide');
         }, 900);
     }
 
@@ -36,6 +37,7 @@ function renderSuccess(msg, hasTimeout) {
 
 function renderStatus(msg) {
     $('#status-container').html(msg);
+    $('#status-container').removeClass('hide');
 }
 
 function capitalize(str) {

@@ -13,7 +13,6 @@ function saveOptions() {
             minimumTime: minimumTime,
             started: "true"
         }, function() {
-
             // Update status to let user know options were saved.
             renderSuccess('Alterações efectuadas com sucesso!', true);
         });

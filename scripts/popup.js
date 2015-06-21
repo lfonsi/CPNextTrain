@@ -4,6 +4,7 @@ function init() {
     chrome.storage.sync.get('started', function(item) {
         if (item.started) {
             $('#initial-content').remove();
+            trainsToShow = [];
             getTrains(moment());
         } else {
             $('#initial-content').removeClass('hide');
@@ -13,7 +14,7 @@ function init() {
     })
 }
 
-function getTrains(date, isNextDay) {
+function getTrains(date) {
     chrome.storage.sync.get({
             origin: 'Entrecampos',
             destination: 'Benfica',
@@ -23,11 +24,6 @@ function getTrains(date, isNextDay) {
             origin = items.origin;
             destination = items.destination;
             minimumTime = parseInt(items.minimumTime);
-
-            if (!isNextDay) {
-                renderStatus('A pesquisar partidas de <b>' + origin + '</b> para <b>' + destination + '</b>...');
-                $('.link').removeClass('hide');
-            }
 
             chrome.runtime.sendMessage({
                 type: 'callService',
@@ -87,7 +83,7 @@ function selectTrains(trains, callback, date) {
         });
 
         if (!found) {
-            getTrains(moment(date).add(1, 'd').startOf('day'), true);
+            getTrains(moment(date).add(1, 'd').startOf('day'));
             return;
         }
 
@@ -103,7 +99,7 @@ function displayTrains(trains) {
         var row = $('<tr>');
         var departureTd = $('<td>').append(train.departureTime.format('HH:mm'));
         var arrivalTd = $('<td>').append(train.arrivalTime.format('HH:mm'));
-        var timeToDepartTd = $('<td>').append(train.departureTime.diff(currentTime, 'minutes') + 'min.');
+        var timeToDepartTd = $('<td>').append(train.departureTime.diff(currentTime, 'minutes') + ' min.');
         row.append(departureTd).append(arrivalTd).append(timeToDepartTd);
         $('#train-table table').append(row);
     });
@@ -114,7 +110,8 @@ function displayTrains(trains) {
         renderError('Não existem comboios para este percurso!', false);
         return;
     }
-
+    $('#loading').addClass('hide');
+    $('.link').removeClass('hide');
     $('#train-table').removeClass('hide');
 }
 

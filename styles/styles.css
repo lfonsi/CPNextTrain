@@ -11,6 +11,7 @@ body {
 
 #container {
     width: auto;
+    min-width: 300px;
     position: relative;
 }
 
@@ -19,7 +20,6 @@ body {
 #status-container {
     width: 300px;
     margin: 0 auto;
-    margin-bottom: 5px;
     text-align: center;
 }
 
@@ -27,6 +27,13 @@ body {
     position: relative;
     font-size: 14px;
     top: -5px;
+}
+
+#loading {
+    color: #17843C;
+    margin: 10px auto;
+    width: 50px;
+    text-align: center;
 }
 
 #success-container,
@@ -59,14 +66,6 @@ body {
     position: relative;
     margin: 0 auto;
     width: 500px;
-}
-
-#img-background {
-    width: 100%;
-    background-image: url('../img/logo.jpg');
-    background-size: 100% 100%;
-    height: auto;
-    /*opacity:0.3;*/
 }
 
 .absolute {
@@ -105,6 +104,11 @@ body {
     font-size: 9px;
     position: absolute;
     right: 0;
+    z-index: 10;
+}
+
+.link a, .link a:visited{
+    color:#000000;
 }
 
 .train {
@@ -123,13 +127,13 @@ input.center {
 
 table {
     border-collapse: collapse;
-    margin: 0 auto;
+    margin: 5px auto;
 }
 
 table,
 th,
 td {
-    border: 2px solid black;
+    border: 2px solid green;
     font-size: 10px;
 }
 
@@ -140,4 +144,10 @@ td {
 
 td {
     text-align: center;
+}
+
+th {
+    background-color: #17843C;
+    font-weight: strong;
+    color: #FFFFFF;
 }
