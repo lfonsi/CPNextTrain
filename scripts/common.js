@@ -20,18 +20,18 @@ function renderError(msg, hasTimeout) {
     if (hasTimeout) {
         setTimeout(function() {
             $('#error-container').addClass('hide');
-        }, 900);
+        }, 1000);
     }
 
 }
 
 function renderSuccess(msg, hasTimeout) {
     $('#success-container').html(msg);
-
+    $('#success-container').removeClass('hide');
     if (hasTimeout) {
         setTimeout(function() {
-            $('#success-container').empty();
-        }, 900);
+            $('#success-container').addClass('hide');
+        }, 1000);
     }
 }
 
@@ -42,4 +42,23 @@ function renderStatus(msg) {
 
 function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function checkStations(origin, destination) {
+
+    var msg;
+
+    if (origin === destination) {
+        msg = 'Por favor indique estações distintas!';
+        renderError(msg, true);
+        return false;
+    }
+
+    if (!origin || !destination) {
+        msg = 'Por favor indique um valor válido para as estações!';
+        renderError(msg, true);
+        return false;
+    }
+
+    return true;
 }

@@ -1,0 +1,81 @@
+body,
+html {
+    width: auto;
+    height: auto;
+}
+
+body {
+    font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+    font-size: 100%;
+}
+
+#container {
+    width: auto;
+    min-width: 250px;
+    position: relative;
+}
+
+#loading {
+    color: #17843C;
+    margin: 10px auto;
+    width: 50px;
+    text-align: center;
+}
+
+#initial-content {
+    position: relative;
+}
+
+#initial-content #save {
+    display: block;
+}
+
+.link {
+    margin: 5px;
+    font-size: 9px;
+    position: absolute;
+    right: 0;
+    z-index: 10;
+}
+
+.link a,
+.link a:visited {
+    color: #000000;
+}
+
+.train {
+    width: 25px;
+    position: relative;
+    top: 5px;
+}
+
+*:focus {
+    outline: none;
+}
+
+table {
+    border-collapse: collapse;
+    margin: 5px auto;
+}
+
+table,
+th,
+td {
+    border: 2px solid green;
+    font-size: 10px;
+}
+
+th,
+td {
+    padding: 5px;
+}
+
+td {
+    text-align: center;
+}
+
+th {
+    background-color: #17843C;
+    font-weight: strong;
+    color: #FFFFFF;
+}

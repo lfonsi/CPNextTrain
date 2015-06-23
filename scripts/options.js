@@ -26,7 +26,7 @@ function restoreOptions() {
     chrome.storage.sync.get({
             origin: '',
             destination: '',
-            nrOccurrences: '1',
+            nrOccurrences: '5',
             minimumTime: '0',
             appVersion: '0'
         },
@@ -51,25 +51,6 @@ function checkNumbers(nrOccurrences, minimumTime) {
 
     if (nrOccurrences > 10) {
         renderError('Por favor escolha um número entre 0 e 10!', true);
-        return false;
-    }
-
-    return true;
-}
-
-function checkStations(origin, destination) {
-
-    var msg;
-
-    if (origin === destination) {
-        msg = 'Por favor indique estações distintas!';
-        renderError(msg, true);
-        return false;
-    }
-
-    if (!origin || !destination) {
-        msg = 'Por favor indique um valor válido para as estações!';
-        renderError(msg, true);
         return false;
     }
 

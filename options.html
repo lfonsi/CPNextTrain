@@ -8,18 +8,24 @@
     <script src="scripts/stations.json"></script>
     <script src="scripts/common.js"></script>
     <script src="scripts/options.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles/options.css">
+    <link rel="stylesheet" type="text/css" href="styles/common.css">
+    <link rel="stylesheet" type="text/css" href="libs/bootstrap/css/bootstrap.min.css">
 </head>
-<link rel="stylesheet" type="text/css" href="styles/styles.css">
 
 <body>
-    <div id="option-container">
+    <div class="panel heading">
+        <img src="img/logo.png">
+        <h1>CPNextTrain - Opções</h1>
+    </div>
+    <div class="panel options-panel">
         <div class="option">
-            <span class="label">Estação de origem</span>
+            <span class="label-dft">Estação de origem</span>
             <select id="origin">
             </select>
         </div>
         <div class="option">
-            <span class="label">Estação de destino</span>
+            <span class="label-dft">Estação de destino</span>
             <select id="destination">
             </select>
         </div>
@@ -32,10 +38,16 @@
             <input type="text" size="2" maxlength="2" id="minTime" class="center">
             <span class="label-occurrences">minutos a chegar à estação</span>
         </div>
-        <div id="success-container"></div>
-        <div id="error-container"></div>
-        <button id="save" class="absolute" disabled="disabled">Gravar</button>
+
+        <div id="success-container" class="alert alert-success hide" role="alert"></div>
+        <div id="error-container" class="alert alert-danger hide" role="alert"></div>
+        <div class="option input">
+            <button id="save" class="btn btn-default" disabled="disabled">Gravar</button>
+        </div>
     </div>
+    <!--<div id="option-container">
+        
+    </div>-->
 </body>
 
 </html>

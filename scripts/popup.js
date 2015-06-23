@@ -7,6 +7,7 @@ function init() {
             trainsToShow = [];
             getTrains(moment());
         } else {
+            $('#loading').addClass('hide');
             $('#initial-content').removeClass('hide');
             buildSelects();
             $('#save').click(clickHandler);
@@ -119,13 +120,15 @@ function clickHandler() {
     origin = $('#origin').val();
     destination = $('#destination').val();
 
-    if (origin !== '' && destination !== '') {
+    if (checkStations(origin, destination)) {
         chrome.storage.sync.set({
             origin: origin,
             destination: destination,
+            nrOccurrences: "5",
             started: "true",
         }, function() {
             $('#initial-content').remove();
+            $('#loading').removeClass('hide');
             getTrains(moment());
         });
     }
