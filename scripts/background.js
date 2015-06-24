@@ -47,10 +47,11 @@ function callService(msg, sendResponse) {
         .error(function(err) {
             response = {
                 success: false,
-                msg: 'error occurred fetching data: ' + err,
+                msg: 'Ocorreu um erro! Por favor tente de novo!',
+                err: err
             };
         })
-        .done(function() {
+        .complete(function() {
             sendResponse(response);
         });
 }

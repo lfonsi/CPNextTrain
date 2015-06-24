@@ -38,6 +38,7 @@ function getTrains(date) {
                     selectTrains(trains, displayTrains, date);
                 } else {
                     renderError(response.msg, false);
+                    console.log(response.err);
                 }
             });
         });

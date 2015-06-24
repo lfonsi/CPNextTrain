@@ -2,8 +2,8 @@
     "manifest_version": 2,
 
     "name": "CPNextTrain",
-    "description": "Para ver a que horas vai sair o próximo comboio da CP",
-    "version": "0.0.1",
+    "description": "Veja a que horas vai sair o próximo comboio da CP a partir da sua estação",
+    "version": "1.0.0",
 
     "browser_action": {
         "default_icon": "img/logo.png",

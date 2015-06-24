@@ -49,33 +49,36 @@ body {
     top: 5px;
 }
 
+.option input#save{
+    margin: auto 0;
+}
+
 *:focus {
     outline: none;
 }
 
-table {
+table.train-table {
     border-collapse: collapse;
     margin: 5px auto;
 }
 
-table,
-th,
-td {
+table.train-table,
+.train-table th,
+.train-table td {
     border: 2px solid green;
     font-size: 10px;
 }
 
-th,
-td {
+.train-table th,
+.train-table td {
     padding: 5px;
 }
 
-td {
+.train-table td {
     text-align: center;
 }
 
-th {
+.train-table th {
     background-color: #17843C;
-    font-weight: strong;
     color: #FFFFFF;
 }
