@@ -49,9 +49,14 @@ function checkNumbers(nrOccurrences, minimumTime) {
         return false;
     }
 
-    if (nrOccurrences > 10) {
-        renderError('Por favor escolha um número entre 0 e 10!', true);
+    if (nrOccurrences < 0 || nrOccurrences > 20) {
+        renderError('Por favor escolha um número entre 0 e 20!', true);
         return false;
+    }
+
+    if(minimumTime < 0 || minimumTime > 100){
+        renderError('Por favor escolha um número entre 0 e 100!', true);
+        return false;   
     }
 
     return true;
