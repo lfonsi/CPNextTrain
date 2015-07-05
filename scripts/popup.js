@@ -37,7 +37,13 @@ function getTrains(date) {
                     var trains = parseData(response.data, date);
                     selectTrains(trains, displayTrains, date);
                 } else {
-                    renderError(response.msg, false);
+                    renderError(response.msg, function() {
+                        $('#loading').addClass('hide');
+                        
+                        var cssLink = $("<link rel='stylesheet' type='text/css' href='libs/bootstrap/css/bootstrap.min.css'>");
+                        $("head").append(cssLink);
+                        
+                    });
                     console.log(response.err);
                 }
             });
@@ -51,11 +57,13 @@ function parseData(data, date) {
 
         var cells = $(el).find('td');
 
+        var trainType = cells[1].innerText;
         var departureTime = cells[2].innerText.split('h');
         var arrivalTime = cells[3].innerText.split('h');
         var duration = cells[4].innerText;
 
         trains.push({
+            trainType: trainType,
             departureTime: moment(date).hour(departureTime[0]).minute(departureTime[1]),
             arrivalTime: moment(date).hour(arrivalTime[0]).minute(arrivalTime[1]),
             duration: duration
@@ -101,7 +109,7 @@ function displayTrains(trains) {
         var row = $('<tr>');
         var departureTd = $('<td>').append(train.departureTime.format('HH:mm'));
         var arrivalTd = $('<td>').append(train.arrivalTime.format('HH:mm'));
-        var timeToDepartTd = $('<td>').append(train.departureTime.diff(currentTime, 'minutes') + ' min.');
+        var timeToDepartTd = $('<td>').append(calculateTime(train.departureTime.diff(currentTime, 'minutes')));
         row.append(departureTd).append(arrivalTd).append(timeToDepartTd);
         $('#train-table table').append(row);
     });
@@ -109,7 +117,7 @@ function displayTrains(trains) {
     renderStatus('<b>' + origin + '</b> ' + img[0].outerHTML + ' <b>' + destination + '</b>');
 
     if (trains.length === 0) {
-        renderError('Não existem comboios para este percurso!', false);
+        renderError('Não existem comboios para este percurso!');
         return;
     }
     $('#loading').addClass('hide');
@@ -133,6 +141,16 @@ function clickHandler() {
             getTrains(moment());
         });
     }
+}
+
+function calculateTime(time) {
+    if (time < 60) {
+        return time + 'min';
+    }
+    var hours = parseInt(time / 60);
+    var minutes = time % 60;
+
+    return hours + 'h' + minutes + 'min';
 }
 
 document.addEventListener('DOMContentLoaded', function() {

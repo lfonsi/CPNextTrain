@@ -14,7 +14,12 @@ function saveOptions() {
             started: "true"
         }, function() {
             // Update status to let user know options were saved.
-            renderSuccess('Alterações efectuadas com sucesso!', true);
+            renderSuccess('Alterações efectuadas com sucesso!', function() {
+
+                setTimeout(function() {
+                    $('#success-container').addClass('hide');
+                }, 1000);
+            });
         });
     }
 }
@@ -44,21 +49,32 @@ function checkNumbers(nrOccurrences, minimumTime) {
 
     if (isNaN(parseInt(nrOccurrences)) || nrOccurrences === '' || isNaN(parseInt(minimumTime)) || minimumTime === '') {
 
-        renderError('Por favor insira um número válido!', true);
+        renderError('Por favor insira um número válido!', function() {
+            setTimeout(function() {
+                $('#error-container').addClass('hide');
+            }, 1000);
+        });
 
         return false;
     }
 
     if (nrOccurrences < 0 || nrOccurrences > 20) {
-        renderError('Por favor escolha um número entre 0 e 20!', true);
+        renderError('Por favor escolha um número entre 0 e 20!', function() {
+            setTimeout(function() {
+                $('#error-container').addClass('hide');
+            }, 1000);
+        });
         return false;
     }
 
-    if(minimumTime < 0 || minimumTime > 100){
-        renderError('Por favor escolha um número entre 0 e 100!', true);
-        return false;   
+    if (minimumTime < 0 || minimumTime > 100) {
+        renderError('Por favor escolha um número entre 0 e 100!', function() {
+            setTimeout(function() {
+                $('#error-container').addClass('hide');
+            }, 1000);
+        });
+        return false;
     }
-
     return true;
 }
 
