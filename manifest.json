@@ -3,7 +3,7 @@
 
     "name": "CPNextTrain",
     "description": "Veja a que horas vai sair o próximo comboio da CP a partir da sua estação",
-    "version": "1.0.0",
+    "version": "1.0.1",
 
     "browser_action": {
         "default_icon": "img/logo.png",

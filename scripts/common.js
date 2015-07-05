@@ -13,25 +13,22 @@ function buildSelects() {
         });
 }
 
-function renderError(msg, hasTimeout) {
+function renderError(msg, callback) {
     $('#error-container').html(msg);
     $('#error-container').removeClass('hide');
-
-    if (hasTimeout) {
-        setTimeout(function() {
-            $('#error-container').addClass('hide');
-        }, 1000);
+    
+    if(callback){
+        callback();
     }
 
 }
 
-function renderSuccess(msg, hasTimeout) {
+function renderSuccess(msg, callback) {
     $('#success-container').html(msg);
     $('#success-container').removeClass('hide');
-    if (hasTimeout) {
-        setTimeout(function() {
-            $('#success-container').addClass('hide');
-        }, 1000);
+    
+    if(callback){
+        callback();
     }
 }
 

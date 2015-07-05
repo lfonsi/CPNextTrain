@@ -65,13 +65,17 @@ table.train-table {
 table.train-table,
 .train-table th,
 .train-table td {
-    border: 2px solid green;
+    border: 2px solid #17843C;
     font-size: 10px;
 }
 
 .train-table th,
 .train-table td {
     padding: 5px;
+}
+
+.train-table th.table-header{
+    width: 80px;
 }
 
 .train-table td {
