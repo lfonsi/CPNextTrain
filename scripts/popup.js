@@ -1,10 +1,9 @@
-var origin, destination, trainsToShow = [];
+var origin, destination;
 
 function init() {
     chrome.storage.sync.get('started', function(item) {
         if (item.started) {
             $('#initial-content').remove();
-            trainsToShow = [];
             getTrains(moment());
         } else {
             $('#loading').addClass('hide');
@@ -24,82 +23,31 @@ function getTrains(date) {
         function(items) {
             origin = items.origin;
             destination = items.destination;
-            minimumTime = parseInt(items.minimumTime);
 
             chrome.runtime.sendMessage({
                 type: 'callService',
                 origin: origin,
                 destination: destination,
-                date: date.format('YYYY-MM-DD')
+                minimumTime: parseInt(items.minimumTime),
+                date: date
             }, function(response) {
 
                 if (response.success) {
-                    var trains = parseData(response.data, date);
-                    selectTrains(trains, displayTrains, date);
+                    displayTrains(response.trains);
+                    
                 } else {
                     renderError(response.msg, function() {
-                        $('#loading').addClass('hide');
                         
+                        $('#loading').addClass('hide');
                         var cssLink = $("<link rel='stylesheet' type='text/css' href='libs/bootstrap/css/bootstrap.min.css'>");
                         $("head").append(cssLink);
                         
                     });
+
                     console.log(response.err);
                 }
             });
         });
-}
-
-function parseData(data, date) {
-    var rows = $(data).find('.table-search-results tbody tr');
-    var trains = [];
-    $(rows).each(function(index, el) {
-
-        var cells = $(el).find('td');
-
-        var trainType = cells[1].innerText;
-        var departureTime = cells[2].innerText.split('h');
-        var arrivalTime = cells[3].innerText.split('h');
-        var duration = cells[4].innerText;
-
-        trains.push({
-            trainType: trainType,
-            departureTime: moment(date).hour(departureTime[0]).minute(departureTime[1]),
-            arrivalTime: moment(date).hour(arrivalTime[0]).minute(arrivalTime[1]),
-            duration: duration
-        });
-    });
-
-    return trains;
-}
-
-function selectTrains(trains, callback, date) {
-    var currentTime = moment(date).add(minimumTime, 'm'),
-        found = false;
-
-    chrome.storage.sync.get({
-        nrOccurrences: '1',
-    }, function(item) {
-        var totalOccurrences = parseInt(item.nrOccurrences);
-
-        $.each(trains, function(index, train) {
-            if (train.departureTime.isAfter(currentTime)) {
-                trainsToShow.push(train);
-                if (trainsToShow.length === totalOccurrences) {
-                    found = true;
-                    return false;
-                }
-            }
-        });
-
-        if (!found) {
-            getTrains(moment(date).add(1, 'd').startOf('day'));
-            return;
-        }
-
-        callback(trainsToShow);
-
-    });
 }
 
 function displayTrains(trains) {
@@ -107,9 +55,9 @@ function displayTrains(trains) {
 
     $.each(trains, function(index, train) {
         var row = $('<tr>');
-        var departureTd = $('<td>').append(train.departureTime.format('HH:mm'));
-        var arrivalTd = $('<td>').append(train.arrivalTime.format('HH:mm'));
-        var timeToDepartTd = $('<td>').append(calculateTime(train.departureTime.diff(currentTime, 'minutes')));
+        var departureTd = $('<td>').append(moment(train.departureTime).format('HH:mm'));
+        var arrivalTd = $('<td>').append(moment(train.arrivalTime).format('HH:mm'));
+        var timeToDepartTd = $('<td>').append(calculateTime(moment(train.departureTime).diff(currentTime, 'minutes')));
         row.append(departureTd).append(arrivalTd).append(timeToDepartTd);
         $('#train-table table').append(row);
     });
@@ -147,8 +95,8 @@ function calculateTime(time) {
     if (time < 60) {
         return time + 'min';
     }
-    var hours = parseInt(time / 60);
-    var minutes = time % 60;
+    var hours = pad(parseInt(time / 60));
+    var minutes = pad(time % 60);
 
     return hours + 'h' + minutes + 'min';
 }
