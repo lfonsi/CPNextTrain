@@ -1,23 +1,23 @@
 function buildSelects() {
-        $.each(stations.cp, function(key, value) {
-            var upperCased = value.replace(/\b\w/g, capitalize);
-            $('#origin').append($('<option>', {
-                    value: upperCased
-                })
-                .text(upperCased));
+    $.each(stations.cp, function(key, value) {
+        var upperCased = value.replace(/\b\w/g, capitalize);
+        $('#origin').append($('<option>', {
+                value: upperCased
+            })
+            .text(upperCased));
 
-            $('#destination').append($('<option>', {
-                    value: upperCased
-                })
-                .text(upperCased));
-        });
+        $('#destination').append($('<option>', {
+                value: upperCased
+            })
+            .text(upperCased));
+    });
 }
 
 function renderError(msg, callback) {
     $('#error-container').html(msg);
     $('#error-container').removeClass('hide');
-    
-    if(callback){
+
+    if (callback) {
         callback();
     }
 
@@ -26,8 +26,8 @@ function renderError(msg, callback) {
 function renderSuccess(msg, callback) {
     $('#success-container').html(msg);
     $('#success-container').removeClass('hide');
-    
-    if(callback){
+
+    if (callback) {
         callback();
     }
 }
@@ -60,6 +60,24 @@ function checkStations(origin, destination) {
     return true;
 }
 
-function pad(value){
-    return value < 10 ? '0'+value : value;
+function calculateTime(time) {
+    if (time < 60) {
+        return time + 'min';
+    }
+    var hours = pad(parseInt(time / 60));
+    var minutes = pad(time % 60);
+
+    return hours + 'h' + minutes + 'min';
+}
+
+function pad(value) {
+    return value < 10 ? '0' + value : value;
+}
+
+function parseNotificationTime(time) {
+    var notificationTime = time.split(':');
+    var momentTime = moment().hour(notificationTime[0]).minute(notificationTime[1]).startOf('minute');
+
+    return moment().isAfter(momentTime) ? momentTime.add(1, 'd') : momentTime;
+
 }

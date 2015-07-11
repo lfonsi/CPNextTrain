@@ -52,3 +52,11 @@ input.center {
 .panel .option{
 	margin: 10px 40px;
 }
+
+input#show-notification{
+    margin-right: 5px;
+}
+
+label.notification-lbl{
+    font-weight: normal;
+}

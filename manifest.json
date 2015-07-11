@@ -3,7 +3,7 @@
 
     "name": "CPNextTrain",
     "description": "Veja a que horas vai sair o próximo comboio da CP a partir da sua estação",
-    "version": "1.0.1",
+    "version": "1.0.2",
 
     "browser_action": {
         "default_icon": "img/logo.png",
@@ -19,11 +19,13 @@
     "options_page": "options.html",
 
     "background": {
-        "scripts": ["scripts/background.js", "scripts/jquery-2.1.3.min.js"],
+        "scripts": ["scripts/background.js", "scripts/jquery-2.1.3.min.js", "scripts/moment.min.js", "scripts/common.js"],
         "persistent": false
     },
 
     "permissions": [
+        "notifications",
+        "alarms",
         "storage",
         "http://www.cp.pt/"
     ]

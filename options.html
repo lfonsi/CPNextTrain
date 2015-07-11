@@ -8,6 +8,7 @@
     <script src="scripts/stations.json"></script>
     <script src="scripts/common.js"></script>
     <script src="scripts/options.js"></script>
+    <script src="scripts/moment.min.js"></script>
     <link rel="stylesheet" type="text/css" href="styles/options.css">
     <link rel="stylesheet" type="text/css" href="styles/common.css">
     <link rel="stylesheet" type="text/css" href="libs/bootstrap/css/bootstrap.min.css">
@@ -31,14 +32,21 @@
         </div>
         <div class="option input">
             <span class="label-occurrences">Número de partidas a mostrar:</span>
-            <input type="text" size="2" maxlength="2" id="nrOccurrences" class="center">
+            <input type="text" size="3" maxlength="2" id="nrOccurrences" class="center">
         </div>
         <div class="option input">
             <span class="label-occurrences">Demoro</span>
             <input type="text" size="3" maxlength="3" id="minTime" class="center">
             <span class="label-occurrences">minutos a chegar à estação</span>
         </div>
+        <div class="option input">
+            <span class="label-dft"><label class="notification-lbl"><input type="checkbox" class="notification-chk" id="show-notification">Notificações</label></span>
 
+            <div class="notification-time hide">
+                <span class="label-occurrences">Ser notificado às</span>
+                <input type="time" id="notification-time">
+            </div>
+        </div>
         <div id="success-container" class="alert alert-success hide" role="alert"></div>
         <div id="error-container" class="alert alert-danger hide" role="alert"></div>
         <div class="option input">

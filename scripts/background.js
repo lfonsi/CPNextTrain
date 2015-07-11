@@ -1,4 +1,5 @@
-var trainsToShow = [], origin, destination;
+var trainsToShow = [],
+    origin, destination;
 
 chrome.runtime.onMessage.addListener(function(msg, _, sendResponse) {
 
@@ -18,48 +19,51 @@ chrome.runtime.onMessage.addListener(function(msg, _, sendResponse) {
 
 });
 
-chrome.runtime.onInstalled.addListener(function(details) {
-    //whenever the extension is installed or updated, this listener will be triggered and the extenstion version will be saved
-    //to the storage
-    setExtensionVersion();
-});
-
 function callService(msg, sendResponse) {
-    var url = "http://www.cp.pt/sites/passageiros/pt/consultar-horarios/horarios-resultado";
-    origin = msg.origin;
-    destination = msg.destination;
-    var timestamp = moment(msg.timestamp);
-    var date = timestamp.format('YYYY-MM-DD');
-    var minimumTime = msg.minimumTime;
-    var response;
-    $.ajax({
-            method: 'POST',
-            url: url,
-            data: {
-                depart: origin,
-                arrival: destination,
-                departDate: date
-            }
-        })
-        .success(function(data) {
-            response = {
-                success: true,
-                msg: 'Pedido efectuado com sucesso! Aguarde...',
-                data: data,
-                date: timestamp,
-                minimumTime: minimumTime
-            };
-        })
-        .error(function(err) {
-            response = {
-                success: false,
-                msg: 'Ocorreu um erro! Por favor tente de novo!',
-                err: err
-            };
-        })
-        .complete(function() {
-            handleServiceResponse(response, sendResponse);
+    chrome.storage.sync.get({
+            origin: 'Entrecampos',
+            destination: 'Benfica',
+            minimumTime: '0'
+        },
+        function(items) {
+            origin = items.origin;
+            destination = items.destination;
+            var url = "http://www.cp.pt/sites/passageiros/pt/consultar-horarios/horarios-resultado";
+            var timestamp = moment(msg.timestamp);
+            var date = timestamp.format('YYYY-MM-DD');
+            var minimumTime = minimumTime;
+            var response;
+            $.ajax({
+                    method: 'POST',
+                    url: url,
+                    data: {
+                        depart: origin,
+                        arrival: destination,
+                        departDate: date
+                    }
+                })
+                .success(function(data) {
+                    response = {
+                        success: true,
+                        msg: 'Pedido efectuado com sucesso! Aguarde...',
+                        data: data,
+                        date: timestamp,
+                        minimumTime: minimumTime
+                    };
+                })
+                .error(function(err) {
+                    response = {
+                        success: false,
+                        msg: 'Ocorreu um erro! Por favor tente de novo!',
+                        err: err
+                    };
+                })
+                .complete(function() {
+                    handleServiceResponse(response, sendResponse);
+                });
+
         });
+
 }
 
 function handleServiceResponse(response, sendResponse) {
@@ -131,19 +135,17 @@ function selectTrains(trains, callback, date, minimumTime) {
 
         if (!found) {
             callService({
-                origin: origin,
-                destination: destination,
-                minimumTime: minimumTime,
-                timestamp: date.add(1,'d').startOf('day')
+                timestamp: date.add(1, 'd').startOf('day')
             }, callback);
-            
-            //getTrains(moment(date).add(1, 'd').startOf('day'));
+
             return;
         }
 
         callback({
             success: true,
-            trains: trainsToShow
+            trains: trainsToShow,
+            origin: origin,
+            destination: destination
         });
 
         trainsToShow = [];
@@ -162,29 +164,80 @@ function getManifest() {
     return manifest;
 }
 
-function showNotification() {
-    var notificationID = 'notification.ID';
-
+function createNotification(data) {
+    var notificationID = 'notification.nextTrains';
     chrome.notifications.clear(notificationID);
+
+    var items;
+    var trains = data.trains;
+    trains = getNextTrains(trains, 3);
+    items = getNotificationTrains(trains);
 
     var opt = {
         type: "list",
         title: "Próximas partidas",
         message: "no message",
         iconUrl: "../img/logo.png",
-        items: [{
-            title: "18:30",
-            message: "10min."
-        }, {
-            title: "18:40",
-            message: "20min."
-        }, {
-            title: "18:50",
-            message: "1h30min."
+        items: items,
+        buttons: [{
+            title: "Snooze"
         }]
     };
 
-    chrome.notifications.create(notificationID, opt, function() {
-        console.log('ran');
+    chrome.notifications.create(notificationID, opt, function() {});
+}
+
+function getNextTrains(trains, number) {
+    return trains.slice(0, number);
+}
+
+function getNotificationTrains(trains) {
+    return trains.map(function(train) {
+        return {
+            title: train.departureTime.format('HH:mm'),
+            message: calculateTime(train.departureTime.diff(moment(), 'minutes'))
+        }
     });
 }
+
+chrome.runtime.onInstalled.addListener(function(details) {
+    //whenever the extension is installed or updated, this listener will be triggered and the extenstion version will be saved
+    //to the storage
+    setExtensionVersion();
+});
+
+chrome.alarms.onAlarm.addListener(function(alarm) {
+    if (alarm.name === 'notification_train' || alarm.name === 'notification_snooze') {
+        callService({
+            timestamp: moment()
+        }, createNotification);
+    }
+});
+
+chrome.notifications.onButtonClicked.addListener(function(notificationID, buttonIndex){
+    if(notificationID === 'notification.nextTrains'){
+        chrome.alarms.create('notification_snooze',{
+            //snooze for 5 minutes
+            when: Date.now() + 300000
+        });
+    }
+});
+
+chrome.runtime.onStartup.addListener(function() {
+
+    //sets the alarm whenever Chrome is started
+    chrome.storage.sync.get({
+        notificationAt: '18:00',
+        notificationActive: true
+    }, function(item) {
+        if (item.notificationActive) {
+            var notificationTime = parseNotificationTime(item.notificationAt);
+
+            chrome.alarms.create('notification_train', {
+                when: notificationTime.valueOf(),
+                periodInMinutes: 24 * 60
+            });
+        }
+    });
+
+});

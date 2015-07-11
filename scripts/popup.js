@@ -15,56 +15,43 @@ function init() {
 }
 
 function getTrains(date) {
-    chrome.storage.sync.get({
-            origin: 'Entrecampos',
-            destination: 'Benfica',
-            minimumTime: '0'
-        },
-        function(items) {
-            origin = items.origin;
-            destination = items.destination;
 
-            chrome.runtime.sendMessage({
-                type: 'callService',
-                origin: origin,
-                destination: destination,
-                minimumTime: parseInt(items.minimumTime),
-                date: date
-            }, function(response) {
+    chrome.runtime.sendMessage({
+        type: 'callService',
+        date: date
+    }, function(response) {
 
-                if (response.success) {
-                    displayTrains(response.trains);
-                    
-                } else {
-                    renderError(response.msg, function() {
-                        
-                        $('#loading').addClass('hide');
-                        var cssLink = $("<link rel='stylesheet' type='text/css' href='libs/bootstrap/css/bootstrap.min.css'>");
-                        $("head").append(cssLink);
-                        
-                    });
+        if (response.success) {
+            displayTrains(response);
 
-                    console.log(response.err);
-                }
+        } else {
+            renderError(response.msg, function() {
+
+                $('#loading').addClass('hide');
+                var cssLink = $("<link rel='stylesheet' type='text/css' href='libs/bootstrap/css/bootstrap.min.css'>");
+                $("head").append(cssLink);
+
             });
-        });
+
+            console.log(response.err);
+        }
+    });
 }
 
-function displayTrains(trains) {
-    var currentTime = moment();
+function displayTrains(response) {
 
-    $.each(trains, function(index, train) {
+    $.each(response.trains, function(index, train) {
         var row = $('<tr>');
         var departureTd = $('<td>').append(moment(train.departureTime).format('HH:mm'));
         var arrivalTd = $('<td>').append(moment(train.arrivalTime).format('HH:mm'));
-        var timeToDepartTd = $('<td>').append(calculateTime(moment(train.departureTime).diff(currentTime, 'minutes')));
+        var timeToDepartTd = $('<td>').append(calculateTime(moment(train.departureTime).diff(moment(), 'minutes')));
         row.append(departureTd).append(arrivalTd).append(timeToDepartTd);
         $('#train-table table').append(row);
     });
     var img = $('<img>').attr('src', '../img/train.png').addClass('train');
-    renderStatus('<b>' + origin + '</b> ' + img[0].outerHTML + ' <b>' + destination + '</b>');
+    renderStatus('<b>' + response.origin + '</b> ' + img[0].outerHTML + ' <b>' + response.destination + '</b>');
 
-    if (trains.length === 0) {
+    if (response.trains.length === 0) {
         renderError('Não existem comboios para este percurso!');
         return;
     }
@@ -89,16 +76,6 @@ function clickHandler() {
             getTrains(moment());
         });
     }
-}
-
-function calculateTime(time) {
-    if (time < 60) {
-        return time + 'min';
-    }
-    var hours = pad(parseInt(time / 60));
-    var minutes = pad(time % 60);
-
-    return hours + 'h' + minutes + 'min';
 }
 
 document.addEventListener('DOMContentLoaded', function() {
