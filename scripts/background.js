@@ -31,7 +31,7 @@ function callService(msg, sendResponse) {
             var url = "http://www.cp.pt/sites/passageiros/pt/consultar-horarios/horarios-resultado";
             var timestamp = moment(msg.timestamp);
             var date = timestamp.format('YYYY-MM-DD');
-            var minimumTime = minimumTime;
+            var minimumTime = items.minimumTime;
             var response;
             $.ajax({
                     method: 'POST',
