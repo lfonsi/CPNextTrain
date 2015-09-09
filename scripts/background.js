@@ -218,7 +218,16 @@ chrome.notifications.onButtonClicked.addListener(function(notificationID, button
     if(notificationID === 'notification.nextTrains'){
         chrome.alarms.create('notification_snooze',{
             //snooze for 5 minutes
-            when: Date.now() + 300000
+            when: Date.now() + 60000//300000
+        });
+    }
+});
+
+chrome.notifications.onClosed.addListener(function(notificationID, byUser){
+    if(notificationID === 'notification.nextTrains' && !byUser){
+        chrome.alarms.create('notification_snooze',{
+            //snooze for 5 minutes
+            when: Date.now() + 60000//300000
         });
     }
 });
