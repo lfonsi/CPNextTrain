@@ -126,8 +126,9 @@ function selectTrains(trains, callback, date, minimumTime) {
         $.each(trains, function(index, train) {
             if (train.departureTime.isAfter(currentTime)) {
                 trainsToShow.push(train);
-                if (trainsToShow.length === totalOccurrences) {
+                if (trainsToShow.length >= totalOccurrences) {
                     found = true;
+                    trainsToShow = trainsToShow.slice(0, totalOccurrences);
                     return false;
                 }
             }
@@ -178,13 +179,10 @@ function createNotification(data) {
         title: "Próximas partidas",
         message: "no message",
         iconUrl: "../img/logo.png",
-        items: items,
-        buttons: [{
-            title: "Snooze"
-        }]
+        items: items
     };
 
-    chrome.notifications.create(notificationID, opt, function() {});
+    chrome.notifications.create(notificationID, opt);
 }
 
 function getNextTrains(trains, number) {
@@ -211,15 +209,6 @@ chrome.alarms.onAlarm.addListener(function(alarm) {
         callService({
             timestamp: moment()
         }, createNotification);
-    }
-});
-
-chrome.notifications.onButtonClicked.addListener(function(notificationID, buttonIndex){
-    if(notificationID === 'notification.nextTrains'){
-        chrome.alarms.create('notification_snooze',{
-            //snooze for 5 minutes
-            when: Date.now() + 300000
-        });
     }
 });
 

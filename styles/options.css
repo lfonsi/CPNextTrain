@@ -60,3 +60,18 @@ input#show-notification{
 label.notification-lbl{
     font-weight: normal;
 }
+
+div.notification-time{
+    display: inline;
+    margin-left: 5px;
+}
+
+span.label-notification{
+    line-height: 30px;
+}
+
+div.version{
+    display: inline;
+    float: right;
+    font-size: 8px;
+}

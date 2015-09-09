@@ -16,7 +16,8 @@
 }
 
 .option .label-dft,
-.option .label-occurrences {
+.option .label-occurrences,
+.option .label-notification {
     margin-bottom: 5px;
 }
 

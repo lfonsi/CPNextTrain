@@ -15,7 +15,7 @@ function saveOptions() {
             minimumTime: minimumTime,
             notificationAt: notificationTime,
             notificationActive: notificationActive,
-            started: "true"
+            started: 'true'
         }, function() {
 
             if (notificationActive) {
@@ -50,7 +50,7 @@ function restoreOptions() {
             destination: '',
             nrOccurrences: '5',
             minimumTime: '0',
-            notificationAt: '18:30',
+            notificationAt: '18:00',
             notificationActive: true,
             appVersion: '0'
         },
@@ -65,6 +65,8 @@ function restoreOptions() {
             if (items.notificationActive) {
                 $('div.notification-time').removeClass('hide');
             }
+
+            $('.version-nr').text('v'+items.appVersion);
             $('#save').removeAttr('disabled');
         });
 }
